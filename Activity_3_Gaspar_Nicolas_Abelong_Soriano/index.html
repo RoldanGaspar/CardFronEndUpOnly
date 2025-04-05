@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic HTML document setup and metadata -->
+    <meta charset="UTF-8">  <!-- Character encoding -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- Responsive viewport settings -->
+    <title>Document</title>  <!-- Page title -->
+    <link rel="stylesheet" href="style.css">  <!-- Link to external CSS stylesheet -->
+</head>
+<body>
+    <!-- Application logo -->
+    <div class="logo">RolDev_Nation</div>
+    
+    <!-- Button to toggle user list sidebar -->
+    <button id="toggleUserList">🤖</button>
+
+    <!-- User List Sidebar - Displays list of all users -->
+    <div class="user-list-sidebar">
+        <h3>People List</h3>
+        <ul id="user-name-list"></ul>  <!-- Dynamically populated with user names -->
+    </div>
+
+    <!-- Search and filter controls section -->
+    <div class="search-sort-container">
+        <!-- Search input field with keyup event handler -->
+        <input type="text" id="search" placeholder="Search users..." onkeyup="filterUsers()">
+        <!-- Clear search button -->
+        <button id="clearSearch" class="clear-btn" title="Clear search">❌</button>
+        <!-- Sort dropdown menu -->
+        <select onchange="sortUsers(this.value)">
+            <option value="">Sort By</option>
+            <option value="name">Name</option>
+            <option value="country">Country</option>
+        </select>
+        <!-- Filter by skill dropdown menu -->
+        <select onchange="filterBySkill(this.value)">
+            <option value="">All Skills</option>
+            <option value="software-engineer">Software Engineer</option>
+            <option value="cyber-security">Cyber Security</option>
+            <option value="web-developer">Web Developer</option>
+            <option value="game-developer">Game Developer</option>
+        </select>
+    </div>
+
+    <!-- Main content container -->
+    <div class="container">
+        <!-- Container for user cards (dynamically populated) -->
+        <div id="user-list" class="users"></div>
+        <!-- Loading spinner (hidden by default) -->
+        <div id="loading"><div class="spinner"></div></div>
+
+        <!-- Pagination controls -->
+        <div class="pagination">
+            <button id="prevBtn">⬅ Previous</button>
+            <span id="pageIndicator">Page 1 of 5</span>  <!-- Current page indicator -->
+            <button id="nextBtn">Next ➡</button>
+        </div>
+    </div>
+
+    <!-- Dark mode toggle button -->
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙</button>
+    
+    <!-- User Detail Modal - Hidden by default, shows detailed user info -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>  <!-- Close button -->
+            <div class="user-details" id="userDetailsContent"></div>  <!-- Dynamically populated with user details -->
+        </div>
+    </div>
+
+    <!-- Link to external JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>

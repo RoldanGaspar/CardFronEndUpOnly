@@ -1,0 +1,791 @@
+/* ====================== */
+/* MODAL STYLES */
+/* ====================== */
+
+/* Base modal container - hidden by default */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;  /* Ensure modal appears above other content */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);  /* Semi-transparent black */
+    transition: all 0.3s ease;
+}
+
+/* Modal content container */
+.modal-content {
+    background: white;
+    margin: 5% auto;  /* Centered vertically */
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;  /* Responsive max width */
+    position: relative;
+    animation: modalopen 0.4s;  /* Entry animation */
+}
+
+/* Dark mode modal styles */
+.dark-mode .modal-content {
+    background: #001100;
+    color: #0f0;
+    border: 1px solid #0f0;
+}
+
+/* Modal close button */
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* User details container in modal */
+.user-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;  /* Spacing between elements */
+}
+
+/* User profile image in modal */
+.user-details img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;  /* Circular image */
+    border: 3px solid #007bff;
+}
+
+/* Dark mode user image */
+.dark-mode .user-details img {
+    border-color: #0f0;
+}
+
+/* User info grid layout */
+.user-info {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;  /* 2-column grid */
+    gap: 10px;
+}
+
+/* Individual info items */
+.info-item {
+    padding: 8px;
+    background: #f5f5f5;
+    border-radius: 5px;
+}
+
+/* Dark mode info items */
+.dark-mode .info-item {
+    background: #002200;
+    color: #0f0;
+}
+
+/* Modal entry animation */
+@keyframes modalopen {
+    from {opacity: 0; transform: translateY(-50px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+/* ====================== */
+/* GENERAL STYLES */
+/* ====================== */
+
+/* Base page styles */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(3deg, rgba(255,255,255,1) 0%, rgba(86,255,163,1) 100%, rgba(4,220,95,1) 100%);
+    text-align: center;
+    transition: background 0.3s, color 0.3s;  /* Smooth theme transitions */
+}
+
+/* Main content container */
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: linear-gradient(3deg, rgba(255,255,255,1) 0%, rgba(86,255,163,1) 50%, rgba(4,220,95,1) 100%);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Page heading */
+h1 {
+    color: #333;
+}
+
+/* Dark mode toggle button */
+#darkModeToggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;  /* Circular button */
+    font-size: 20px;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* Dark mode toggle hover effect */
+#darkModeToggle:hover {
+    transform: scale(1.1);
+}
+
+/* ====================== */
+/* USER CARD STYLES */
+/* ====================== */
+
+/* Container for all user cards */
+.users {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Individual user card */
+.user-card {
+    background: linear-gradient(135deg, #ffffff, #f0f0f0);
+    border-radius: 15px;
+    padding: 10px;
+    margin: 10px;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 220px;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* User role badge */
+.user-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+/* Different badge colors for roles */
+.software-engineer { background: #3498db; }
+.cyber-security { background: #e74c3c; }
+.web-developer { background: #2ecc71; }
+.game-developer { background: #9b59b6; }
+
+/* User card image */
+.user-card img {
+    border: 3px solid #007bff;
+    transition: transform 0.3s;
+}
+
+/* User card image hover effect */
+.user-card img:hover {
+    transform: translateY(-5px);
+    box-shadow: 3px 6px 12px rgba(0, 0, 0, 0.15);
+    z-index: -1;
+}
+
+/* User card heading */
+.user-card h3 {
+    margin: 10px 0 5px;
+}
+
+/* User card text */
+.user-card p {
+    color: gray;
+    font-size: 14px;
+}
+
+/* ====================== */
+/* NOTIFICATION STYLES */
+/* ====================== */
+
+/* Notification container */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 5px;
+    z-index: 1000;
+    transform: translateX(200%);  /* Start off-screen */
+    transition: transform 0.3s ease-out;
+}
+
+/* Notification show state */
+.notification.show {
+    transform: translateX(0);  /* Slide in */
+}
+
+/* ====================== */
+/* BUTTON STYLES */
+/* ====================== */
+
+/* Base button styles */
+.like-btn, .follow-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Follow button specific style */
+.follow-btn {
+    background: #ffc107;
+}
+
+/* Liked state */
+.like-btn.liked {
+    background: red;
+    animation: pulse 0.5s ease;
+}
+
+/* Following state */
+.follow-btn.following {
+    background: #17a2b8;
+    animation: pulse 0.5s ease;
+}
+
+/* Button pulse animation */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Button active state */
+.like-btn:active, .follow-btn:active {
+    transform: scale(0.95);
+}
+
+/* Button ripple effect */
+.like-btn::after, .follow-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255,255,255,0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+}
+
+/* Ripple animation trigger */
+.like-btn:focus:not(:active)::after,
+.follow-btn:focus:not(:active)::after {
+    animation: ripple 0.6s ease-out;
+}
+
+/* Ripple animation */
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+/* ====================== */
+/* DARK MODE STYLES */
+/* ====================== */
+
+/* Base dark mode styles */
+.dark-mode {
+    background: #000;
+    color: #0f0;
+    background: linear-gradient(135deg, #000 0%, #001a00 100%);
+}
+
+/* Dark mode sidebar */
+.dark-mode .user-list-sidebar {
+    background: rgba(0, 20, 0, 0.8);
+    color: #0f0;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+    border: 1px solid #0f0;
+}
+
+/* Dark mode container */
+.dark-mode .container {
+    background: rgba(0, 10, 0, 0.8);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+    border: 1px solid #0f0;
+}
+
+/* Dark mode user cards */
+.dark-mode .user-card {
+    background: rgba(0, 15, 0, 0.7);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    border: 1px solid #0f0;
+}
+
+/* Dark mode buttons */
+.dark-mode button {
+    background: #ffffff9c;
+    color: rgb(3, 21, 3);
+    border: 1px solid #0f0;
+    text-shadow: 0 0 5px #0f0;
+}
+
+/* Dark mode inputs */
+.dark-mode input {
+    background: #001100;
+    color: #0f0;
+    border: 1px solid #0f0;
+}
+
+/* Dark mode toggle buttons */
+.dark-mode #toggleUserList,
+.dark-mode #darkModeToggle {
+    background: #003300;
+    color: #0f0;
+    border: 1px solid #0f0;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+/* Dark mode search input */
+.dark-mode #search{
+    border: 1px solid #0f0;
+}
+
+/* ====================== */
+/* LOGO STYLES */
+/* ====================== */
+
+/* Application logo */
+.logo {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-family: 'Arial', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    color: #000;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+    z-index: 1000;
+}
+
+/* Dark mode logo */
+.dark-mode .logo {
+    color: #0f0;
+    text-shadow: 0 0 15px rgba(0, 255, 0, 0.9);
+}
+
+/* Dark mode sidebar list items */
+.dark-mode .user-list-sidebar li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: rgb(255, 255, 255);
+}
+
+/* Dark mode sidebar heading */
+.dark-mode .user-list-sidebar h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #ffffff;
+}
+
+/* ====================== */
+/* LOADING & PAGINATION */
+/* ====================== */
+
+/* Loading spinner container */
+#loading {
+    display: none;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Pagination container */
+.pagination {
+    margin-top: 20px;
+}
+
+/* Pagination buttons */
+.pagination button {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+/* Pagination button hover */
+.pagination button:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Disabled pagination button */
+.pagination button:disabled {
+    background: gray;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* ====================== */
+/* RESPONSIVE STYLES */
+/* ====================== */
+
+/* Tablet styles */
+@media (max-width: 1024px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+    
+    .user-card {
+        width: calc(50% - 20px);
+    }
+    
+    .search-sort-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    select {
+        width: 100%;
+    }
+}
+
+/* Mobile landscape and small tablets */
+@media (max-width: 768px) {
+    .user-list-sidebar {
+        width: 180px;
+        height: 60vh;
+        top: 100px;
+        left: 10px;
+    }
+    
+    #toggleUserList {
+        left: 10px;
+        bottom: 80px;
+    }
+    
+    #darkModeToggle {
+        bottom: 80px;
+        right: 10px;
+    }
+}
+
+/* Mobile portrait */
+@media (max-width: 480px) {
+    *{
+        margin: 4px;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+        margin-top: 40px;
+    }
+    
+    .logo {
+        position: static;
+        text-align: center;
+        margin: 10px 0;
+        font-size: 1.8rem;
+    }
+    
+    .container {
+        margin-top: 10px;
+        padding: 10px;
+        gap: 20px;
+    }
+    
+    .user-card {
+        width: 100%;
+        margin: 12px 0;
+        padding: 15px;
+    }
+
+    /* Mobile modal styles */
+    .modal-content {
+        width: 95%;
+        max-width: none;
+        margin: 10% auto;
+        padding: 15px;
+    }
+
+    .user-details img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .user-info {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .info-item {
+        padding: 6px;
+        font-size: 14px;
+    }
+
+    .close-modal {
+        right: 10px;
+        top: 5px;
+        font-size: 24px;
+    }
+
+    @keyframes modalopen {
+        from {opacity: 0; transform: translateY(-20px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+    
+    .search-sort-container {
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+    
+    #search {
+        max-width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+    
+    select {
+        padding: 12px;
+        font-size: 16px;
+    }
+    
+    .user-list-sidebar {
+        width: 90%;
+        height: 60vh;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1001;
+        padding: 15px;
+    }
+    
+    #toggleUserList, 
+    #darkModeToggle {
+        padding: 15px;
+        font-size: 18px;
+        min-width: 50px;
+        min-height: 50px;
+    }
+    
+    #toggleUserList {
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 25px;
+        width: 20%;
+    }
+    
+    #darkModeToggle {
+        bottom: 25px;
+        right: 10px;
+    }
+    
+    .pagination button {
+        padding: 12px 16px;
+        font-size: 10px;
+        margin: 8px;
+    }
+    
+    .user-badge {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+    
+    .like-btn, 
+    .follow-btn {
+        padding: 10px 15px;
+        font-size: 16px;
+        margin: 8px;
+    }
+}
+
+/* ====================== */
+/* SPINNER & FORM ELEMENTS */
+/* ====================== */
+
+/* Loading spinner */
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+/* Spinner animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Search input */
+#search {
+    flex: 1;
+    max-width: 300px;
+    padding: 10px;
+    border: 2px solid #000000;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+/* Search input focus state */
+#search:focus {
+    border-color: #007bff;
+    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.3);
+    outline: none;
+    transform: scale(1.05);
+}
+
+/* Clear search button */
+.clear-btn {
+    background: #fcadb5;
+    color: white;
+    border: none;
+    padding: 10px 12px;
+    margin-left: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Clear button hover */
+.clear-btn:hover {
+    background: #c82333;
+    transform: scale(1.05);
+}
+
+/* Dropdown select */
+select {
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Dropdown hover */
+select:hover {
+    border-color: #007bff;
+    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* ====================== */
+/* SIDEBAR STYLES */
+/* ====================== */
+
+/* User list sidebar */
+.user-list-sidebar {
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px;
+    height: 500px;
+    overflow-y: auto;
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    display: none;
+}
+
+/* Show class for toggling visibility */
+.show {
+    display: block !important;
+    transition: all ease-in-out .3s;
+}
+
+/* Hide scrollbar */
+.user-list-sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Sidebar heading */
+.user-list-sidebar h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #000000;
+}
+
+/* Sidebar list */
+.user-list-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Sidebar list items */
+.user-list-sidebar li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: rgb(0, 0, 0);
+}
+
+/* Sidebar list item hover */
+.user-list-sidebar li:hover {
+    background: #007bff;
+    color: white;
+}
+
+/* Toggle sidebar button */
+#toggleUserList {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 15px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10000;
+}
+
+/* Toggle button hover */
+#toggleUserList:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+}
