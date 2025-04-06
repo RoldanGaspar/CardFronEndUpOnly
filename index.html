@@ -1,74 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Basic HTML document setup and metadata -->
-    <meta charset="UTF-8">  <!-- Character encoding -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- Responsive viewport settings -->
-    <title>Document</title>  <!-- Page title -->
-    <link rel="stylesheet" href="style.css">  <!-- Link to external CSS stylesheet -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Proj</title>
+
+    <!-- Styling link -->
+    <link rel="stylesheet" href="style.css">
+    
 </head>
 <body>
-    <!-- Application logo -->
-    <div class="logo">RolDev_Nation</div>
-    
-    <!-- Button to toggle user list sidebar -->
-    <button id="toggleUserList">🤖</button>
 
-    <!-- User List Sidebar - Displays list of all users -->
-    <div class="user-list-sidebar">
-        <h3>People List</h3>
-        <ul id="user-name-list"></ul>  <!-- Dynamically populated with user names -->
+    <!-- Hamburger Button -->
+    <div class="hamburger" onclick="toggleUserList()">
+        <div></div>
+        <div></div>
+        <div></div>
     </div>
 
-    <!-- Search and filter controls section -->
-    <div class="search-sort-container">
-        <!-- Search input field with keyup event handler -->
-        <input type="text" id="search" placeholder="Search users..." onkeyup="filterUsers()">
-        <!-- Clear search button -->
-        <button id="clearSearch" class="clear-btn" title="Clear search">❌</button>
-        <!-- Sort dropdown menu -->
-        <select onchange="sortUsers(this.value)">
-            <option value="">Sort By</option>
-            <option value="name">Name</option>
-            <option value="country">Country</option>
-        </select>
-        <!-- Filter by skill dropdown menu -->
-        <select onchange="filterBySkill(this.value)">
-            <option value="">All Skills</option>
-            <option value="software-engineer">Software Engineer</option>
-            <option value="cyber-security">Cyber Security</option>
-            <option value="web-developer">Web Developer</option>
-            <option value="game-developer">Game Developer</option>
-        </select>
-    </div>
+    <!-- Animated circles in the background -->
+    <div class="circle circle1"></div>
+    <div class="circle circle2"></div>
+    <div class="circle circle3"></div>
 
-    <!-- Main content container -->
-    <div class="container">
-        <!-- Container for user cards (dynamically populated) -->
-        <div id="user-list" class="users"></div>
-        <!-- Loading spinner (hidden by default) -->
-        <div id="loading"><div class="spinner"></div></div>
-
-        <!-- Pagination controls -->
-        <div class="pagination">
-            <button id="prevBtn">⬅ Previous</button>
-            <span id="pageIndicator">Page 1 of 5</span>  <!-- Current page indicator -->
-            <button id="nextBtn">Next ➡</button>
+    <div class="title">
+        <div class="loader">
+            <div class="left_word">Owner Card Account</div>
+            <div class="words">
+                <span class="word">Security</span>
+                <span class="word">Convenience</span>
+                <span class="word">Personalization</span>
+                <span class="word">Time-Saving</span>
+                <span class="word">Transparency</span>
+            </div>
         </div>
     </div>
 
-    <!-- Dark mode toggle button -->
-    <button id="darkModeToggle" onclick="toggleDarkMode()">🌙</button>
-    
-    <!-- User Detail Modal - Hidden by default, shows detailed user info -->
-    <div id="userModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal()">&times;</span>  <!-- Close button -->
-            <div class="user-details" id="userDetailsContent"></div>  <!-- Dynamically populated with user details -->
+    <div class="page-container">
+        
+        <!-- User List Section -->
+        <div class="user-list" id="userList">
+            <h2 class="user-title">User List</h2>
+            <div class="user-box">
+                <div class="user-info">User 1</div>
+                <div class="user-credentials">Username: john_doe</div>
+                <div class="user-credentials">Password: johndoe1234</div>
+            </div>
+            <div class="user-box">
+                <div class="user-info">User 2</div>
+                <div class="user-credentials">Username: jane_doe</div>
+                <div class="user-credentials">Password: janedoe5678</div>
+            </div>
+            <div class="user-box">
+                <div class="user-info">User 3</div>
+                <div class="user-credentials">Username: user_three</div>
+                <div class="user-credentials">Password: userthree910</div>
+            </div>
+        </div>
+        
+        <!-- Card and Button Section -->
+        <div class="right-section">
+            <div class="card">
+                <div class="card-info">$15,872</div>
+                <div class="card-logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 24 24" fill="none">
+                        <circle cx="17" cy="12" r="7" fill="orange"></circle>
+                        <circle cx="7" cy="12" r="7" fill="rgba(255, 0, 0, 0.6)"></circle>
+                    </svg>
+                </div>
+                <div class="card-number">4209 **** **** 0210</div>
+                <div class="card-holder">CHRISTIAN VIZCARRA</div>
+            </div>
+                
+            <div class="button-container">
+                <button class="button" onclick="alert('Remove card clicked')">Remove card</button>
+                <button class="button" onclick="alert('Edit card clicked')">Edit card</button>
+                <button id="b1" class="button" onclick="alert('Cancel clicked')">Cancel</button>
+            </div>
         </div>
     </div>
 
-    <!-- Link to external JavaScript file -->
+
+
+    <!-- scripting for hamburger button sliding -->
     <script src="script.js"></script>
-</body>
+
+</body> 
 </html>
