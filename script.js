@@ -320,19 +320,19 @@ tabButtons.forEach(button => {
     });
 });
 
-// Add event listener for clear favorites
+//================================================================================================================================
+//=============================================== Favorites Section ====================================================================
+//================================================================================================================================
+// Add event listener for clear all favorites
 // This section handles clearing all favorites with confirmation
 clearFavorites.addEventListener('click', () => {
-    // Shows confirmation dialog before clearing favorites
     if (confirm('Are you sure you want to clear all favorites?')) {
-        // Clears the favorites array
         favorites = [];
-        // Updates localStorage with empty favorites
         localStorage.setItem('favorites', JSON.stringify(favorites));
-        // Updates the favorites display
         displayFavorites();
-        // Updates notification badges
         updateNotificationBadges();
+        // Refresh the search results to update indicators
+        displayResults(flights);
     }
 });
 
@@ -431,7 +431,12 @@ function toggleFavorite(flight) {
     updateNotificationBadges(); 
 }
 
-// Function to validate the flight search form inputs
+
+//================================================================================================================================
+//=============================================== Search Section ====================================================================
+//================================================================================================================================
+
+//  Function to validate the flight search form inputs
 function validateForm() {
     let isValid = true; // Assume form is valid initially
 
@@ -439,7 +444,6 @@ function validateForm() {
     const origin = document.getElementById('origin').value.trim();
     const destination = document.getElementById('destination').value.trim(); 
     const departureDate = document.getElementById('departureDate').value; 
-    const maxPrice = document.getElementById('maxPrice').value; 
 
     // Clear any previous error messages and styling from form groups
     document.querySelectorAll('.form-group').forEach(group => {
@@ -477,13 +481,6 @@ function validateForm() {
         }
     }
 
-    // Validate max price input if user provided one
-    if (maxPrice && (isNaN(maxPrice) || maxPrice <= 0)) {
-        showFieldError('maxPrice', 'Please enter a valid price');
-        isValid = false;
-    }
-
-    // Return true if all fields are valid, false otherwise
     return isValid;
 }
 
@@ -531,9 +528,9 @@ function hideError() {
     errorMessage.style.display = 'none'; 
 }
 
-//===========
-
-//================================
+//================================================================================================================================
+//=============================================== Search Section ====================================================================
+//================================================================================================================================
 
 // Function to handle flight search form submission
 async function handleSearch(e) {
@@ -549,10 +546,9 @@ async function handleSearch(e) {
     const destination = document.getElementById('destination').value.trim(); // Destination airport/city
     const departureDate = document.getElementById('departureDate').value; // Selected departure date
 
-    // Get the optional max price and convert it to a number if it exists
-    const priceLimit = document.getElementById('maxPrice').value ? 
-        parseFloat(document.getElementById('maxPrice').value) : 
-        null;
+//================================================================================================================================
+//=============================================== API FLOW STARTS====================================================================
+//================================================================================================================================
 
     try {
         // Show the loading spinner and hide any previous error messages
@@ -565,43 +561,56 @@ async function handleSearch(e) {
         // Use the token to search for flights based on the user's input
         let flightData = await searchFlights(accessToken, origin, destination, departureDate);
         
-        // If user specified a price limit, filter out flights above that price
-        if (priceLimit) {
-            flightData = flightData.filter(flight => 
-                parseFloat(flight.price.total) <= priceLimit
-            );
-        }
-        
-        // Save the filtered results globally and to localStorage (for persistence)
+        // Save the results globally and to localStorage (for persistence)
         flights = flightData;
         localStorage.setItem('flights', JSON.stringify(flights));
         
         // If no flights were found, show an error message
         if (flights.length === 0) {
             showError('No flights found matching your criteria. Please try different search parameters.');
+            // Clear the map if no flights found
+            if (flightRoute) {
+                map.removeLayer(flightRoute);
+            }
+            map.setView([20, 0], 2);
         } else {
             // Otherwise, display the results in the UI
             displayResults(flights);
 
-            // Also update the map with the flight route if origin and destination are available
+            // Update the map with the current search route
             if (origin && destination) {
+                // Remove any existing route
+                if (flightRoute) {
+                    map.removeLayer(flightRoute);
+                }
+                // Update map with new route
                 updateMap(origin, destination);
+            }
+
+            // Smooth scroll to the results section when clicking the search button
+            const resultsSection = document.querySelector('.results-container');
+            if (resultsSection) {
+                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
     } catch (error) {
         // Catch and log any errors, and show a user-friendly error message
         console.error('Error:', error);
         showError('An error occurred while searching for flights. Please try again later.');
+        // Clear the map on error
+        if (flightRoute) {
+            map.removeLayer(flightRoute);
+        }
+        map.setView([20, 0], 2);
     } finally {
         // Always hide the loading spinner once the process completes (success or error)
         hideLoading();
     } 
 }
 
-//==============================================================================================================
-//==========================API REQUEST===================================================================
-//==================================================================================================
-
+//================================================================================================================================
+//=============================================== API GET ACCESS TOKEN ====================================================================
+//================================================================================================================================
 
 // Function to request and retrieve an access token from the Amadeus API
 async function getAccessToken() {
@@ -636,7 +645,7 @@ async function searchFlights(accessToken, origin, destination, departureDate) {
     try {
         // Construct API request with query parameters
         const response = await fetch(
-            `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${origin}&destinationLocationCode=${destination}&departureDate=${departureDate}&adults=1&max=7`,
+            `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${origin}&destinationLocationCode=${destination}&departureDate=${departureDate}&adults=1&max=6`,
             {
                 headers: {
                     // Use Bearer token for authorization
@@ -660,6 +669,8 @@ async function searchFlights(accessToken, origin, destination, departureDate) {
     }
 }
 
+
+
 // Function to display the list of flight search results in the UI
 function displayResults(flights) {
     resultsList.innerHTML = ''; // Clear previous results
@@ -679,7 +690,7 @@ function displayResults(flights) {
 
 
 //===========================================================================================================================================
-//================================ Not Done Yet ============================================================================================
+//====================================== Search Results Modal Section =====================================================================
 //================================================================================================================================
 
 // Function to open a modal showing detailed flight information
@@ -687,26 +698,60 @@ function openModal(flight, index) {
     currentFlightId = index; // Store the index of the currently selected flight for use in other functions (e.g., delete or edit)
 
     // Check if the selected flight is already in the favorites list by matching flight IDs
-    const isFavorite = favorites.some(f => f.id === flight.id); 
+    const isFavorite = favorites.some(f => 
+        f.itineraries[0].segments[0].departure.iataCode === flight.itineraries[0].segments[0].departure.iataCode &&
+        f.itineraries[0].segments[0].arrival.iataCode === flight.itineraries[0].segments[0].arrival.iataCode &&
+        f.itineraries[0].segments[0].departure.at === flight.itineraries[0].segments[0].departure.at &&
+        f.itineraries[0].segments[0].carrierCode === flight.itineraries[0].segments[0].carrierCode &&
+        f.itineraries[0].segments[0].number === flight.itineraries[0].segments[0].number &&
+        f.price.total === flight.price.total &&
+        f.price.currency === flight.price.currency
+    );
     
-    // Construct and insert the flight detail HTML into the modal content area
+    // Update the save favorite button text and state based on favorite status
+    const saveFavorite = document.getElementById('saveFavorite');
+    if (saveFavorite) {
+        saveFavorite.textContent = isFavorite ? 'Remove from Favorites' : 'Save to Favorites';
+        saveFavorite.classList.toggle('active', isFavorite);
+    }
+
+    // Construct and insert the flight detail HTML into the modal content area with grid layout
     modalContent.innerHTML = `
-        <div class="flight-details">
-            <h3>Flight Details</h3>
-            <p><strong>From:</strong> ${flight.itineraries[0].segments[0].departure.iataCode}</p> <!-- Show departure airport code -->
-            <p><strong>To:</strong> ${flight.itineraries[0].segments[0].arrival.iataCode}</p> <!-- Show arrival airport code -->
-            <p><strong>Departure:</strong> ${new Date(flight.itineraries[0].segments[0].departure.at).toLocaleString()}</p> <!-- Format and display departure date/time -->
-            <p><strong>Arrival:</strong> ${new Date(flight.itineraries[0].segments[0].arrival.at).toLocaleString()}</p> <!-- Format and display arrival date/time -->
-            <p><strong>Duration:</strong> ${calculateDuration(flight)}</p> <!-- Calculate and show total flight duration -->
-            <p><strong>Price:</strong> ${flight.price.total} ${flight.price.currency}</p> <!-- Show flight cost and currency -->
-            <p><strong>Airline:</strong> ${flight.validatingAirlineCodes[0]}</p> <!-- Show airline code validating the flight -->
-            <p><strong>Flight Number:</strong> ${flight.itineraries[0].segments[0].carrierCode}${flight.itineraries[0].segments[0].number}</p> <!-- Show combined airline code and flight number -->
+        <div class="flight-details-grid">
+            <div class="grid-item">
+                <h4>From</h4>
+                <p>${flight.itineraries[0].segments[0].departure.iataCode}</p>
+            </div>
+            <div class="grid-item">
+                <h4>To</h4>
+                <p>${flight.itineraries[0].segments[0].arrival.iataCode}</p>
+            </div>
+            <div class="grid-item">
+                <h4>Departure</h4>
+                <p>${new Date(flight.itineraries[0].segments[0].departure.at).toLocaleString()}</p>
+            </div>
+            <div class="grid-item">
+                <h4>Arrival</h4>
+                <p>${new Date(flight.itineraries[0].segments[0].arrival.at).toLocaleString()}</p>
+            </div>
+            <div class="grid-item">
+                <h4>Duration</h4>
+                <p>${calculateDuration(flight)}</p>
+            </div>
+            <div class="grid-item">
+                <h4>Price</h4>
+                <p>${flight.price.total} ${flight.price.currency}</p>
+            </div>
+            <div class="grid-item">
+                <h4>Airline</h4>
+                <p>${flight.validatingAirlineCodes[0]}</p>
+            </div>
+            <div class="grid-item">
+                <h4>Flight Number</h4>
+                <p>${flight.itineraries[0].segments[0].carrierCode}${flight.itineraries[0].segments[0].number}</p>
+            </div>
         </div>
     `;
-    
-    // Update the save/remove button label and style based on favorite status
-    saveFavorite.textContent = isFavorite ? 'Remove from Favorites' : 'Save to Favorites';
-    saveFavorite.classList.toggle('active', isFavorite); // Add or remove "active" CSS class
 
     // Make the modal visible on the screen
     modal.style.display = 'block';
@@ -749,6 +794,7 @@ function clearAllResults() {
     hideError();
 }
 
+
 // Event listener to close modals when clicking outside their boundary
 window.addEventListener('click', (e) => {
     if (e.target === modal) {
@@ -759,6 +805,10 @@ window.addEventListener('click', (e) => {
         comparisonModal.style.display = 'none'; // Close comparison modal
     }
 });
+
+//================================================================================================================================
+//=============================================== Sorting Section ====================================================================
+//================================================================================================================================
 
 // Function to sort flights based on user-selected criteria
 function handleSort() {
@@ -790,6 +840,10 @@ function handleSort() {
 
     displayResults(sortedFlights); // Display the sorted flight list on the UI
 }
+
+//================================================================================================================================
+//=============================================== Filtering Section ====================================================================
+//================================================================================================================================
 
 // Function to filter flights based on type and departure time
 function handleFilter() {
@@ -828,9 +882,8 @@ function handleFilter() {
 }
 
 //===========================================================================================================================================
-//================================ Not Done Yet ============================================================================================
+//=============================================== Compare Section ====================================================================
 //================================================================================================================================
-
 
 // Comparison function to add/remove flights and show comparison if needed
 function toggleCompare(flight) {
@@ -926,6 +979,10 @@ function createFlightCard(flight, index) {
     // Create a container for status indicators (e.g., booked, favorite)
     const statusIndicators = document.createElement('div');
     statusIndicators.className = 'status-indicators';
+
+//================================================================================================================================
+//=============================================== Flight Card Section ====================================================================
+//================================================================================================================================
     
     // Determine if the current flight is already booked by checking the bookedFlights array
     // This comparison ensures an exact match by verifying origin, destination, departure date/time, and price
@@ -946,6 +1003,10 @@ function createFlightCard(flight, index) {
         f.itineraries[0].segments[0].carrierCode === flight.itineraries[0].segments[0].carrierCode &&
         f.itineraries[0].segments[0].number === flight.itineraries[0].segments[0].number
     );
+
+//================================================================================================================================
+//=============================================== booked status ====================================================================
+//================================================================================================================================
     
     // If the flight is booked, create and append a booked status indicator icon to the status container
     if (isBooked) {
@@ -1062,7 +1123,7 @@ function createFlightCard(flight, index) {
 
 
 //===========================================================================================================================================
-//================================ Not Done Yet ============================================================================================
+//=============================================== Favorites Section ====================================================================
 //================================================================================================================================
 
 
@@ -1551,7 +1612,7 @@ function handleBooking(event) {
             <i class="fas fa-check-circle"></i>
             <h3>Booking Confirmed!</h3>
             <p>Your booking reference is: <strong>${booking.bookingReference}</strong></p>
-            <p>We've sent the details to your email.</p>
+            <p>Thank you for booking with us!</p>
             <button class="view-booking-btn" onclick="showBookedFlights()">View My Bookings</button>
             <button class="download-receipt-btn" onclick="generateBookingPDF(${JSON.stringify(booking).replace(/"/g, '&quot;')})">Download Receipt</button>
         </div>
@@ -1853,16 +1914,13 @@ function populateAirportDropdowns() {
  */
 const clearBooked = document.getElementById('clearBooked');
 clearBooked.addEventListener('click', () => {
-    // Ask for confirmation before deleting all bookings
     if (confirm('Are you sure you want to clear all bookings?')) {
-        // Reset the bookings array to empty
         bookedFlights = [];
-        // Update localStorage to persist the empty state
         localStorage.setItem('bookedFlights', JSON.stringify(bookedFlights));
-        // Refresh the UI to show empty state
         updateBookedFlightsUI();
-        // Update notification badges to show zero count
         updateNotificationBadges();
+        // Refresh the search results to update indicators
+        displayResults(flights);
     }
 });
 
