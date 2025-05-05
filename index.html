@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travel Search App</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -78,7 +78,7 @@
                         <input type="date" id="departureDate" required>
                     </div>
                     <div class="form-group">
-                        <label for="maxPrice">Maximum Price</label>
+                        <label for="currency">Currency Converter</label>
                         <div class="price-input-container">
                             <select id="currency" class="currency-selector">
                                 <option value="USD">USD</option>
@@ -90,7 +90,6 @@
                                 <option value="CAD">CAD</option>
                                 <option value="PHP">PHP</option>
                             </select>
-                            <input type="number" id="maxPrice" placeholder="Enter maximum price">
                         </div>
                     </div>
                     <button type="submit">Search Flights</button>
